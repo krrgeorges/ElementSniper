@@ -159,76 +159,36 @@ function snipeOnElement(e){
 
 function displayElementDetails(element){
 	console.log(element)
-	var blank = document.createTextNode("\u00A0\u00A0\u00A0\u00A0")
 	var spacing = "15"
-	var bar = '<div id="sniper_bar" style="padding:5px;width:100%!important;position:fixed;background-color:black;top:0px;left:0px;z-index:100;white-space:nowrap;"></div>'
 	var sniper_bar = document.createElement("DIV")
 	sniper_bar.id = "sniper_bar"
-	sniper_bar.style.padding = "5px";sniper_bar.style.width="100%";sniper_bar.style.position="fixed";sniper_bar.style.backgroundColor="black";sniper_bar.style.top="0px";sniper_bar.style.left="0px";sniper_bar.style.zIndex="100";sniper_bar.style.whiteSpace="nowrap";
+	sniper_bar.style.padding = "5px";sniper_bar.style.width="100%";sniper_bar.style.position="fixed";sniper_bar.style.backgroundColor="black";sniper_bar.style.top="0px";sniper_bar.style.left="0px";sniper_bar.style.zIndex="100";
 	
-	var elem1 = document.createElement("BUTTON")
-	elem1.style.display="inline-block";elem1.innerHTML="COPY ID";elem1.id="sniper_l_id";elem1.style.backgroundColor="#27ae60";elem1.style.color="white"
-	elem1.onclick = function(){
-		document.getElementById("sniper_e_id").focus()
-		document.getElementById("sniper_e_id").select()
-		document.execCommand("copy")
+
+	var elem_data = {"COPY ID":["sniper_e_id","sniper_l_id"],"COPY CLASS":["sniper_e_class","sniper_l_class"],"COPY FULL XPATH":["sniper_e_fxpath","sniper_l_fxpath"],"COPY UNIQUE XPATH":["sniper_e_uxpath","sniper_l_uxpath"]}
+	var elem1 = null
+
+	for(var elemText in elem_data){
+		var elemData = elem_data[elemText]
+		elem1 = document.createElement("BUTTON")
+		elem1.style.display="inline-block";elem1.innerHTML=elemText;elem1.id=elemData[1];elem1.style.backgroundColor="#27ae60";elem1.style.color="white"
+		elem1.onclick = function(){
+			document.getElementById(elemData[0]).focus()
+			document.getElementById(elemData[0]).select()
+			document.execCommand("copy")
+		}
+		sniper_bar.appendChild(elem1)
+		elem1 = document.createElement("INPUT")
+		elem1.id=elemData[0]
+		elem1.type="text"
+		elem1.style.marginRight=spacing+"px"
+		sniper_bar.appendChild(elem1)
 	}
-	sniper_bar.appendChild(elem1)
-	var elem2 = document.createElement("INPUT")
-	elem2.id="sniper_e_id"
-	elem2.type="text"
-	elem2.style.marginRight=spacing+"px"
-	sniper_bar.appendChild(elem2)
 
-	var elem1 = document.createElement("BUTTON")
-	elem1.style.display="inline-block";elem1.innerHTML="COPY CLASS";elem1.id="sniper_l_class";elem1.style.backgroundColor="#27ae60";elem1.style.color="white"
-	elem1.onclick = function(){
-		document.getElementById("sniper_e_class").focus()
-		document.getElementById("sniper_e_class").select()
-		document.execCommand("copy")
-	}
-	sniper_bar.appendChild(elem1)
-	var elem2 = document.createElement("INPUT")
-	elem2.id="sniper_e_class"
-	elem2.type="text"
-	elem2.style.marginRight=spacing+"px"
-	sniper_bar.appendChild(elem2)
-
-
-	var elem1 = document.createElement("BUTTON")
-	elem1.style.display="inline-block";elem1.innerHTML="COPY FULL XPATH";elem1.id="sniper_l_fxpath";elem1.style.backgroundColor="#27ae60";elem1.style.color="white"
-	elem1.onclick = function(){
-		document.getElementById("sniper_e_fxpath").focus()
-		document.getElementById("sniper_e_fxpath").select()
-		document.execCommand("copy")
-	}
-	sniper_bar.appendChild(elem1)
-	var elem2 = document.createElement("INPUT")
-	elem2.id="sniper_e_fxpath"
-	elem2.type="text"
-	elem2.style.marginRight=spacing+"px"
-	sniper_bar.appendChild(elem2)
-
-	var elem1 = document.createElement("BUTTON")
-	elem1.style.display="inline-block";elem1.innerHTML="COPY UNIQUE XPATH";elem1.id="sniper_l_uxpath";elem1.style.backgroundColor="#27ae60";elem1.style.color="white"
-	sniper_bar.appendChild(elem1)
-	elem1.onclick = function(){
-		document.getElementById("sniper_e_uxpath").focus()
-		document.getElementById("sniper_e_uxpath").select()
-		document.execCommand("copy")
-	}
-	var elem2 = document.createElement("INPUT")
-	elem2.id="sniper_e_uxpath"
-	elem2.type="text"
-	elem2.style.marginRight=spacing+"px"
-	sniper_bar.appendChild(elem2)
-
-
-
-	var elem1 = document.createElement("BR")
+	elem1 = document.createElement("BR")
 	sniper_bar.appendChild(elem1)
 
-	var elem1 = document.createElement("BUTTON")
+	elem1 = document.createElement("BUTTON")
 	elem1.innerHTML="CLOSE"
 	elem1.onclick = function(){
 		document.getElementById("sniper_bar").remove()
@@ -237,37 +197,19 @@ function displayElementDetails(element){
 
 
 	document.body.appendChild(sniper_bar)
+
 	document.getElementById("sniper_e_class").value = element.classList
-	document.getElementById("sniper_e_class").style.width = document.getElementById("sniper_e_class").value.length + 'ch'
 	document.getElementById("sniper_e_id").value = element.id
-	document.getElementById("sniper_e_id").style.width = document.getElementById("sniper_e_id").value.length + 'ch'
 	document.getElementById("sniper_e_fxpath").value = Elements.DOMPath.xPath(element,false)
-	document.getElementById("sniper_e_fxpath").style.width = document.getElementById("sniper_e_fxpath").value.length + 'ch'
 	document.getElementById("sniper_e_uxpath").value = Elements.DOMPath.xPath(element,true)
-	document.getElementById("sniper_e_uxpath").style.width = document.getElementById("sniper_e_uxpath").value.length + 'ch'
 
-	if(document.getElementById("sniper_e_class").value.trim()==""){
-		document.getElementById("sniper_l_class").remove()
-		document.getElementById("sniper_e_class").remove()
+	for(var elemText in elem_data){
+		document.getElementById(elem_data[elemText][0]).style.width = document.getElementById(elem_data[elemText][0]).value.length + 'ch'
+		if(document.getElementById(elem_data[elemText][0]).value.trim()==""){
+			document.getElementById(elem_data[elemText][1]).remove()
+			document.getElementById(elem_data[elemText][0]).remove()
+		}
 	}
-	if(document.getElementById("sniper_e_id").value.trim()==""){
-		document.getElementById("sniper_l_id").remove()
-		document.getElementById("sniper_e_id").remove()
-	}
-	if(document.getElementById("sniper_e_fxpath").value.trim()==""){
-		document.getElementById("sniper_l_fxpath").remove()
-		document.getElementById("sniper_e_fxpath").remove()
-	}
-	if(document.getElementById("sniper_e_uxpath").value.trim()==""){
-		document.getElementById("sniper_l_uxpath").remove()
-		document.getElementById("sniper_e_uxpath").remove()
-	}
-
-
-
-
-
-
 
 }
 
