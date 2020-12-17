@@ -162,7 +162,7 @@ function displayElementDetails(element){
 	var spacing = "15"
 	var sniper_bar = document.createElement("DIV")
 	sniper_bar.id = "sniper_bar"
-	sniper_bar.style.padding = "5px";sniper_bar.style.width="100%";sniper_bar.style.position="fixed";sniper_bar.style.backgroundColor="black";sniper_bar.style.top="0px";sniper_bar.style.left="0px";sniper_bar.style.zIndex="100";
+	sniper_bar.style.padding = "5px";sniper_bar.style.width="100%";sniper_bar.style.position="fixed";sniper_bar.style.backgroundColor="black";sniper_bar.style.top="0px";sniper_bar.style.left="0px";sniper_bar.style.zIndex="10000";
 	
 
 	var elem_data = {"COPY ID":["sniper_e_id","sniper_l_id"],"COPY CLASS":["sniper_e_class","sniper_l_class"],"COPY FULL XPATH":["sniper_e_fxpath","sniper_l_fxpath"],"COPY UNIQUE XPATH":["sniper_e_uxpath","sniper_l_uxpath"]}
@@ -172,9 +172,11 @@ function displayElementDetails(element){
 		var elemData = elem_data[elemText]
 		elem1 = document.createElement("BUTTON")
 		elem1.style.display="inline-block";elem1.innerHTML=elemText;elem1.id=elemData[1];elem1.style.backgroundColor="#27ae60";elem1.style.color="white"
+        elem1.dataset.id = elemData[0]
 		elem1.onclick = function(){
-			document.getElementById(elemData[0]).focus()
-			document.getElementById(elemData[0]).select()
+            console.log()
+			document.getElementById(this.dataset.id).focus()
+			document.getElementById(this.dataset.id).select()
 			document.execCommand("copy")
 		}
 		sniper_bar.appendChild(elem1)
